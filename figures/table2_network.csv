@@ -1,0 +1,9 @@
+,before,after
+"d(KZT,RUB)",1.08,1.102
+"corr(KZT,RUB)",0.417,0.393
+KZT–RUB steps in tree,1,1
+KZT neighbours,RUB,RUB
+RUB neighbours,"CAD, KZT","HUF, KZT, TRY"
+KZT betweenness,0.0,0.0
+RUB betweenness,0.087,0.17
+mean edge length,0.906,0.869
