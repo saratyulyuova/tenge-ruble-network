@@ -25,3 +25,27 @@ MST (minimum spanning tree): connects all stocks with the fewest and shortest li
 Subdominant ultrametric: the distance between two stocks in the tree = the longest link on the path between them. This is used to draw the hierarchical tree.
 Dendrogram: the tree picture. The lower two stocks join, the more similar they are.
 APT (Arbitrage Pricing Theory): the idea that stock returns depend on several common factors.
+
+## Day 2 — data download and cleaning
+- Downloaded daily closes for 26 currencies, gold and 3 factors (Brent, DXY, VIX) from Yahoo Finance, Aug 2015 – Sep 2026 (2,909 days). Flipped EUR and AUD to "units per 1 USD".
+- Missing values ~0.1% for all currencies (3.5% for gold, US holidays). No currency was frozen (highest no-change share: UZS 8.4%).
+- Excluded KGS (no data) and UZS (not market-determined before the 2017 liberalisation). Final sample: 24 currencies + gold.
+- Yahoo data contain one-day spikes that reverse the next day (e.g. NOK on 1 Jan 2021, when the market is closed). Rule: a >10% daily move almost fully reversed the next day = data error, replaced by the previous value. 15 days removed.
+- Large moves that do not reverse were kept as real events: RUB March 2022, TRY Aug 2018, Mar 2021, Nov–Dec 2021.
+
+## Day 3 — verification against official central-bank rates
+- KZT from the National Bank of Kazakhstan (every Wednesday), RUB from the Bank of Russia.
+- RUB: correlation of weekly returns with Yahoo 0.82. After shifting the official rate one business day back (it is set the day before), 0.96 before 2022 but only 0.89 after → the ruble market fragmented after the sanctions. The 2022-07-06 jump exists only in Yahoo.
+- KZT: 0.935; shifting makes it worse, so the NBK rate is dated correctly. Yahoo is ~0.5% below official and shows a ~3.5% gap from mid-2026.
+- Decision: official rates for KZT and RUB, Yahoo for the other 22 currencies.
+
+## Day 4 — weekly returns
+- 578 weekly (Wednesday) log returns, 24 currencies. Sign check passed: KZT, RUB, NOK, CAD correlate positively with oil and negatively with DXY; JPY and CHF positively with VIX.
+- KZT is more correlated with oil than RUB (0.26 vs 0.14). KZT and RUB are weakly linked to DXY (−0.16, −0.18) compared with NOK (−0.57).
+- RUB is the most volatile currency (~21% per year). KZT: excess kurtosis ~17, skewness ~−2.5 (rare sharp devaluation-type weeks).
+
+## Day 5 — trees and hypothesis test (analysis.ipynb)
+- The ruble is the tenge's nearest neighbour in the minimum spanning tree both before and after 24 Feb 2022. Correlation 0.417 → 0.393.
+- Block bootstrap (5,000 resamples, 8-week blocks): raw Δd = +0.022, 95% CI [−0.044, +0.473]; after oil, DXY, VIX Δd = −0.072, 95% CI [−0.123, +0.358]. Both contain zero → no significant change.
+- The ruble's own position changed: neighbours CAD → HUF, TRY; betweenness 0.087 → 0.170. Mean edge length 0.906 → 0.869.
+- Bootstrap intervals are skewed because the correlation depends on a few extreme weeks; the conclusion uses the interval, not the p-value.

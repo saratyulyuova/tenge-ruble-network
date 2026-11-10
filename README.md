@@ -1,4 +1,3 @@
-README with results
 # Tenge and Ruble in the Emerging-Market Currency Network, 2015–2026
 
 *Independent research project (ongoing) · Sara Tyulyuova · Almaty, Kazakhstan · 2026*
